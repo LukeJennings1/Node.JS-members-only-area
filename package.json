@@ -1,0 +1,28 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.5",
+    "nodemon": "^2.0.20"
+  },
+  "name": "node.js-members-only-area",
+  "description": "",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LukeJennings1/Node.JS-members-only-area.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LukeJennings1/Node.JS-members-only-area/issues"
+  },
+  "homepage": "https://github.com/LukeJennings1/Node.JS-members-only-area#readme"
+}
