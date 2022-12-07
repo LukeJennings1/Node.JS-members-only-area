@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserProfile = new Schema({
-    username: {type: String, require: true},
-    password: {type: String, require: true}
+    username: {type: String, require: true, unique: true},
+    password: {type: String, require: true},
+    token: {type: String}
 })
 const User = mongoose.model('User', UserProfile);
 
@@ -13,5 +14,14 @@ const MessagePost = new Schema({
 })
 const Post = mongoose.model('Post', MessagePost);
 
-module.exports = Post;
-module.exports = User;
+const superSecretKey = new Schema({
+    key: { type: Number, require: true }
+})
+const AccessKey = mongoose.model('AccessKey', superSecretKey) 
+
+// const key = new AccessKey({ // make one initial save of the key 
+//     key: 2969
+//   })
+//   key.save(AccessKey)
+
+module.exports = {User: User, AccessKey:AccessKey}
