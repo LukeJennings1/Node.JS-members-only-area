@@ -8,7 +8,6 @@ const LocalStrategy = require("passport-local").Strategy;
 const session = require("express-session");
 const { json } = require('express/lib/response');
 var jwt = require('jsonwebtoken');
-const res = require('express/lib/response');
 const cookieParser = require('cookie-parser')
 
 
@@ -86,16 +85,12 @@ passport.use( new LocalStrategy((username, password, done) => { // login validat
     res.render("index", { user: req.body.user })
   });
   
-  const tokenCreation = (user) => {
-    const token = createToken(user)
-  
-    return token
-  }
+    // const tokenCreate = createToken(user)
 
   app.post("/", passport.authenticate("local", {failureRedirect: '/404'}),
      function(req, res) {
        res.clearCookie('jwt'); // clear initial jwt cookie
-       res.cookie('jwt', tokenCreation(User._id), {httpOnly: true, maxAge: maxAge * 1000}) // create jwt cookie
+       res.cookie('jwt', createToken(User._id), {httpOnly: true, maxAge: maxAge * 1000}) // create jwt cookie
        res.redirect('/postsignuppage')
        // navigate to here after successful login
     });
@@ -115,7 +110,6 @@ app.get('/create', (req,res) => {
 })
 
 
-
 app.post('/create', (req, res) => { // create new user and password (with password hasing & salting)
     if (req.body.password === req.body.ConfirmPassword) {
         bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
@@ -125,14 +119,13 @@ app.post('/create', (req, res) => { // create new user and password (with passwo
             })
             newUser.save() // save to db
         });
-        res.cookie('jwt', tokenCreation(User._id), {httpOnly: true, maxAge: maxAge * 1000})
+        res.cookie('jwt', createToken(User._id), {httpOnly: true, maxAge: maxAge * 1000})
         res.render('members', {user: User.username});
     } else {
         res.alert('Password does not match!')
         res.redirect('/create')
     }
 })
-
 
 app.get("/members", requireAuth, (req, res) => {
   res.render("members");
