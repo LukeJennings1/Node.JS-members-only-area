@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
-const {User, AccessKey} = require("/Users/mac1/Node.JS/Node.JS-members-only-area/models/model.js");
+const {User, Post} = require("/Users/mac1/Node.JS/Node.JS-members-only-area/models/model.js");
 const bcrypt = require('bcrypt');
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
@@ -26,6 +26,22 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 app.use(cookieParser());
+
+let dbArray = null;
+
+const databaseDownload = () => {
+    Post.find()
+    .then((result) => {
+    dbArray = result; 
+    // console.log(dbArray)
+    })
+}
+databaseDownload()
+// const MessagePost = new Post({
+//   Title: 'hi again everyone', 
+//   Body: 'testpost', 
+// })
+// MessagePost.save()
 
 passport.use( new LocalStrategy((username, password, done) => { // login validator 
       User.findOne({ username: username }, (err, user) => {
@@ -81,10 +97,10 @@ passport.use( new LocalStrategy((username, password, done) => { // login validat
     });
   });
 
-  app.get("/", (req, res) => {
+  app.get("/login", (req, res) => {
     res.render("index", { user: req.body.user })
   });
-  
+
     // const tokenCreate = createToken(user)
 
   app.post("/", passport.authenticate("local", {failureRedirect: '/404'}),
@@ -106,9 +122,12 @@ passport.use( new LocalStrategy((username, password, done) => { // login validat
   });
 
 app.get('/create', (req,res) => {
-    res.render('createUser')
+    res.render('createUser' )
 })
-
+app.get('/', (req, res) => { // home page
+  res.render('home', {dbArray: dbArray})
+  console.log(dbArray)
+})
 
 app.post('/create', (req, res) => { // create new user and password (with password hasing & salting)
     if (req.body.password === req.body.ConfirmPassword) {

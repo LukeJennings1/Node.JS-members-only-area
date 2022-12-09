@@ -24,4 +24,4 @@ const AccessKey = mongoose.model('AccessKey', superSecretKey)
 //   })
 //   key.save(AccessKey)
 
-module.exports = {User: User, AccessKey:AccessKey}
+module.exports = {User: User, Post:Post}
